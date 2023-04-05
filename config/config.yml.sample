@@ -1,0 +1,25 @@
+# Database Config
+db:
+  development:
+    host: tusharjaindb.zxey2fj.mongodb.net
+    username: TusharJainFunctionup
+    password: functionup 
+
+  production:
+    host: tusharjaindb.zxey2fj.mongodb.net
+    username: TusharJainFunctionup
+    password: functionup
+
+# App Config
+app:
+  development:
+    protocol: http
+    host: localhost
+    port: 3000
+    api_prefix: /api
+
+  production:
+    protocol: http
+    host: localhost
+    port: 3000
+    api_prefix: /api
