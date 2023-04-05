@@ -54,7 +54,7 @@ class contactController extends BaseController {
 
       let checkContactExist = await contactModel.findOne({_id: contactId, isDeleted:false})
       if(!checkContactExist){
-        return res.status(404).send({status:false, message:"Contact doesn't exist"})
+        return res.status(404).send({status:false, message:"Contact is not exist"})
       }
 
       if (number) {
@@ -64,13 +64,59 @@ class contactController extends BaseController {
         }
       }
 
-      let savedContact = await contactModel.findOne(
+      let savedContact = await contactModel.findOneAndUpdate(
         { _id: contactId, isDeleted: false },
         data,
         { new: true }
       )
 
       res.status(200).send({ status: true, message: savedContact })
+    }
+    catch (error) {
+      res.status(500).send({ status: false, error: error.message })
+    }
+  }
+
+  //<-------------------------------------get Contact------------------------------>
+
+  async getContacts(req, res) {
+
+    try {
+      let data = req.body
+      let {name, email} = data
+
+      let filter = { isDeleted: false }
+
+      if(name){
+        filter.name = name
+      }
+
+      if(email){
+        filter.email = email
+      }
+
+      let findContacts = await contactModel.findOne(filter).sort()
+
+      res.status(200).send({ status: true, message: findContacts })
+    }
+    catch (error) {
+      res.status(500).send({ status: false, error: error.message })
+    }
+  }
+
+  //---------------------------Get Contact By Id-------------------------->
+
+  async getContact(req, res) {
+
+    try {
+      let contactId = req.params.contactId
+
+      let contactData = await contactModel.findOne({_id: contactId, isDeleted: false})
+      if(!contactData){
+        return res.status(404).send({status:false, message:"contact is not exist"})
+      }
+
+      res.status(200).send({ status: true, message: contactData })
     }
     catch (error) {
       res.status(500).send({ status: false, error: error.message })
@@ -84,7 +130,7 @@ class contactController extends BaseController {
     try {
       let contactId = req.params.contactId
 
-      await contactModel.findOne(
+      await contactModel.findOneAndUpdate(
         { _id: contactId, isDeleted: false },
         { isDeleted: true },
         { new: true }

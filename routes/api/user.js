@@ -20,6 +20,20 @@ router.post("/addContact", ContactController.addContact.bind(ContactController))
 router.post("/editContact", ContactController.editContact.bind(ContactController));
 
 /**
+ * @route   GET api/users
+ * @desc    Get All Contact
+ * @access  Public
+ */
+router.get("/getContacts", ContactController.getContacts.bind(ContactController));
+
+/**
+ * @route   GET api/users
+ * @desc    Get One Contact
+ * @access  Public
+ */
+router.get("/getContact/:contactId", ContactController.getContact.bind(ContactController));
+
+/**
  * @route   Delete api/users
  * @desc    delete Contact
  * @access  Public
