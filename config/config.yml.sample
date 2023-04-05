@@ -1,14 +1,14 @@
 # Database Config
 db:
   development:
-    host: tusharjaindb.zxey2fj.mongodb.net
-    username: TusharJainFunctionup
-    password: functionup 
+    host: 
+    username: 
+    password: 
 
   production:
-    host: tusharjaindb.zxey2fj.mongodb.net
-    username: TusharJainFunctionup
-    password: functionup
+    host: 
+    username: 
+    password: 
 
 # App Config
 app:
