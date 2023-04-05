@@ -17,7 +17,7 @@ router.post("/addContact", ContactController.addContact.bind(ContactController))
  * @desc    Edit Contact
  * @access  Public
  */
-router.post("/editContact", ContactController.editContact.bind(ContactController));
+router.post("/editContact/:contactId", ContactController.editContact.bind(ContactController));
 
 /**
  * @route   GET api/users
@@ -38,7 +38,7 @@ router.get("/getContact/:contactId", ContactController.getContact.bind(ContactCo
  * @desc    delete Contact
  * @access  Public
  */
-router.delete("/deleteContact", ContactController.deleteContact.bind(ContactController));
+router.delete("/deleteContact/:contactId", ContactController.deleteContact.bind(ContactController));
 
 
 module.exports = router;

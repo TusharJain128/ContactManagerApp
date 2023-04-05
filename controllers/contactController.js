@@ -95,7 +95,7 @@ class contactController extends BaseController {
         filter.email = email
       }
 
-      let findContacts = await contactModel.findOne(filter).sort()
+      let findContacts = await contactModel.find(filter)
 
       res.status(200).send({ status: true, message: findContacts })
     }
@@ -129,7 +129,7 @@ class contactController extends BaseController {
 
     try {
       let contactId = req.params.contactId
-
+      
       await contactModel.findOneAndUpdate(
         { _id: contactId, isDeleted: false },
         { isDeleted: true },
