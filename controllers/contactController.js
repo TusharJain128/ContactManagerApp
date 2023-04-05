@@ -4,6 +4,8 @@ const BaseController = require("./baseController");
 
 const contactModel = require("../models/contact");
 
+const {AvatarGenerator} = require('random-avatar-generator')
+
 class contactController extends BaseController {
   constructor() {
     super(contactModel);
@@ -21,6 +23,14 @@ class contactController extends BaseController {
       if (!number) {
         return res.status(400).send({ status: false, message: "Number is required" })
       }
+
+      let uniqueCheck= await contactModel.findOne({number: number, isDeleted:false})
+      if(uniqueCheck){
+        return res.status(400).send({status: false, message: "Number is already exist"})
+      }
+
+      const generator = new AvatarGenerator()
+      data.profileImage = generator.generateRandomAvatar()
   
       let savedContact = await contactModel.create(data)
   
