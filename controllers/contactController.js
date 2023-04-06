@@ -16,11 +16,12 @@ class contactController extends BaseController {
   async addContact(req, res) {
     try {
       let data = req.body
-      let { name, number } = data
+      let { name, number ,email} = data
 
       if (!name) {
         return res.status(400).send({ status: false, message: "Name is required" })
       }
+      data.name = name.toLowerCase()
 
       if (!number) {
         return res.status(400).send({ status: false, message: "Number is required" })
@@ -29,6 +30,10 @@ class contactController extends BaseController {
       let uniqueCheck = await contactModel.findOne({ number: number, isDeleted: false })
       if (uniqueCheck) {
         return res.status(400).send({ status: false, message: "Number is already exist" })
+      }
+
+      if(email){
+        data.email = email.toLowerCase()
       }
 
       const generator = new AvatarGenerator()
@@ -49,7 +54,7 @@ class contactController extends BaseController {
 
     try {
       let data = req.body
-      let { number } = data
+      let { number, name, email} = data
       let contactId = req.params.contactId
 
       let checkContactExist = await contactModel.findOne({_id: contactId, isDeleted:false})
@@ -62,6 +67,14 @@ class contactController extends BaseController {
         if (uniqueCheck) {
           return res.status(400).send({ status: false, message: "Number is already exist" })
         }
+      }
+
+      if(name){
+        data.name = name.toLowerCase()
+      }
+
+      if(email){
+        data.email = email.toLowerCase()
       }
 
       let savedContact = await contactModel.findOneAndUpdate(
@@ -85,17 +98,19 @@ class contactController extends BaseController {
       let data = req.body
       let {name, email} = data
 
-      let filter = { isDeleted: false }
+      let filter = {isDeleted: false}
 
       if(name){
-        filter.name = name
+        data.name = name.toLowerCase()
+        filter.name = data.name
       }
 
       if(email){
+        data.email = email.toLowerCase()
         filter.email = email
       }
 
-      let findContacts = await contactModel.find(filter)
+      let findContacts = await contactModel.find(filter).sort({name: 1})
 
       res.status(200).send({ status: true, message: findContacts })
     }
