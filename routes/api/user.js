@@ -1,44 +1,22 @@
 const express = require("express");
 
-const contactController = require("../../controllers/contactController");
+const userController = require("../../controllers/userController");
 
 const router = express.Router();
-const ContactController = new contactController()
+const UserController = new userController()
 
 /**
- * @route   Post api/users
- * @desc    Add Contact
+ * @route   Post api/user
+ * @desc    Create user
  * @access  Public
  */
-router.post("/addContact", ContactController.addContact.bind(ContactController));
+router.post("/createUser", UserController.registerUser.bind(UserController));
 
 /**
- * @route   Post api/users
- * @desc    Edit Contact
+ * @route   Post api/user
+ * @desc    Login user
  * @access  Public
  */
-router.post("/editContact/:contactId", ContactController.editContact.bind(ContactController));
-
-/**
- * @route   GET api/users
- * @desc    Get All Contact
- * @access  Public
- */
-router.get("/getContacts", ContactController.getContacts.bind(ContactController));
-
-/**
- * @route   GET api/users
- * @desc    Get One Contact
- * @access  Public
- */
-router.get("/getContact/:contactId", ContactController.getContact.bind(ContactController));
-
-/**
- * @route   Delete api/users
- * @desc    delete Contact
- * @access  Public
- */
-router.delete("/deleteContact/:contactId", ContactController.deleteContact.bind(ContactController));
-
+router.post("/loginUser", UserController.loginUser.bind(UserController));
 
 module.exports = router;

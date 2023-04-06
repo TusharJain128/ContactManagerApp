@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const BaseController = require("./baseController");
 
-const contactModel = require("../models/contact");
+const contactModel = require("../models/contactModel");
 
 const { AvatarGenerator } = require('random-avatar-generator')
 
@@ -13,7 +13,7 @@ class contactController extends BaseController {
 
   //--------------------------Create contact------------------------------->
 
-  async addContact(req, res) {
+  async createContact(req, res) {
     try {
       let data = req.body
       let { name, number ,email} = data
