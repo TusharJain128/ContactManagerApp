@@ -102,12 +102,12 @@ class contactController extends BaseController {
 
       if(name){
         data.name = name.toLowerCase()
-        filter.name = data.name
+        filter.name = {$regex : name}
       }
 
       if(email){
         data.email = email.toLowerCase()
-        filter.email = email
+        filter.email = {$regex : email}
       }
 
       let findContacts = await contactModel.find(filter).sort({name: 1})
