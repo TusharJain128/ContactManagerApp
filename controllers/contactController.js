@@ -39,6 +39,8 @@ class contactController extends BaseController {
       const generator = new AvatarGenerator()
       data.profileImage = generator.generateRandomAvatar()
 
+      data.userId = req.decode.userId
+
       let savedContact = await contactModel.create(data)
 
       res.status(201).send({ status: true, message: savedContact })
@@ -92,25 +94,37 @@ class contactController extends BaseController {
 
   //<-------------------------------------get Contact------------------------------>
 
+  // async getContacts(req, res) {
+
+  //   try {
+  //     let data = req.body
+  //     let {name, email} = data
+
+  //     let filter = {isDeleted: false}
+
+  //     if(name){
+  //       data.name = name.toLowerCase()
+  //       filter.name = {$regex : name}
+  //     }
+
+  //     if(email){
+  //       data.email = email.toLowerCase()
+  //       filter.email = {$regex : email}
+  //     }
+
+  //     let findContacts = await contactModel.find(filter).sort({name: 1})
+
+  //     res.status(200).send({ status: true, message: findContacts })
+  //   }
+  //   catch (error) {
+  //     res.status(500).send({ status: false, error: error.message })
+  //   }
+  // }
+
   async getContacts(req, res) {
 
     try {
-      let data = req.body
-      let {name, email} = data
-
-      let filter = {isDeleted: false}
-
-      if(name){
-        data.name = name.toLowerCase()
-        filter.name = {$regex : name}
-      }
-
-      if(email){
-        data.email = email.toLowerCase()
-        filter.email = {$regex : email}
-      }
-
-      let findContacts = await contactModel.find(filter).sort({name: 1})
+      let findContacts = await contactModel.find({userId: req.decode.userId}).sort({name: 1})
 
       res.status(200).send({ status: true, message: findContacts })
     }

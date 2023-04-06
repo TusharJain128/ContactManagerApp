@@ -26,6 +26,9 @@ const contactSchema = new mongoose.Schema({
     profileImage:{
         type: String
     },
+    userId:{
+        type: String
+    },
     isDeleted: {
         type: Boolean,
         default: false

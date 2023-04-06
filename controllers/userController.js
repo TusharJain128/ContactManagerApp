@@ -81,7 +81,7 @@ class userController extends BaseController {
     
             if(checkEmail.password == password){
     
-                let token = jwt.sign({userId: checkEmail._id}, "Functionup")
+                let token = jwt.sign({userId: checkEmail._id}, "FSOC")
                 
                 res.status(200).send({status:true, message: token})
             }
