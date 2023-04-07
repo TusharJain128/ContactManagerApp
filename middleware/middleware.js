@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const contactModel = require('../models/contactModel')
-
 const userModel = require('../models/userModel')
+const mongoose = require('mongoose')
 
 exports.authentication = function(req,res,next){
 
@@ -29,7 +29,12 @@ exports.authentication = function(req,res,next){
 
 exports.autherisation = async function(req,res,next){
     try {
-        let checkAuth = await contactModel.findOne({_id: req.params.contactId})
+        let contactId = req.params.contactId
+        if (!mongoose.isValidObjectId(contactId)) {
+            return res.status(400).send({ status: false, message: "Please enter valid contactId in params" })
+          }
+
+        let checkAuth = await contactModel.findOne({_id: contactId})
 
         if(checkAuth.userId != req.decode.userId){
             return res.status(403).send({status:false, message:"You are not autherised"})

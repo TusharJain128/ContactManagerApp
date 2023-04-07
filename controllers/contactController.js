@@ -55,7 +55,7 @@ class contactController extends BaseController {
       }
 
       let error
-      const validation = await createContactJoi.validateAsync(data).then(() => true).catch((err) => { error = err.message; return null })
+      const validation = await editContactJoi.validateAsync(data).then(() => true).catch((err) => { error = err.message; return null })
       if (!validation) return res.status(400).send({ status: false, message: error })
 
 
@@ -140,10 +140,6 @@ class contactController extends BaseController {
     try {
       let contactId = req.params.contactId
 
-      if (!mongoose.isValidObjectId(contactId)) {
-        return res.status(400).send({ status: false, message: "Please enter valid contactId in params" })
-      }
-
       let contactData = await contactModel.findOne({ _id: contactId, isDeleted: false })
       if (!contactData) {
         return res.status(404).send({ status: false, message: "contact is not exist" })
@@ -162,10 +158,6 @@ class contactController extends BaseController {
 
     try {
       let contactId = req.params.contactId
-
-      if (!mongoose.isValidObjectId(contactId)) {
-        return res.status(400).send({ status: false, message: "Please enter valid contactId in params" })
-      }
 
       await contactModel.findOneAndUpdate(
         { _id: contactId, isDeleted: false },
