@@ -16,6 +16,8 @@ connectDatabase();
 // Init Middleware
 app.use(express.json({ extended: false }));
 
+app.use(cors())
+
 // Server Check
 app.get("/", (req, res) => res.send("API Running"));
 

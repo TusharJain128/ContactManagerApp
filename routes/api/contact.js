@@ -14,11 +14,11 @@ const ContactController = new contactController()
 router.post("/createContact", authentication, ContactController.createContact.bind(ContactController));
 
 /**
- * @route   Post api/users
+ * @route   Put api/users
  * @desc    Edit Contact
  * @access  Public
  */
-router.post("/editContact/:contactId", authentication, autherisation, ContactController.editContact.bind(ContactController));
+router.put("/editContact/:contactId", authentication, autherisation, ContactController.editContact.bind(ContactController));
 
 /**
  * @route   GET api/users
