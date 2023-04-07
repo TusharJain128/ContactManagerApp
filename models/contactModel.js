@@ -4,24 +4,29 @@ const contactSchema = new mongoose.Schema({
 
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     email: {
-        type: String
+        type: String,
+        trim: true
     },
     number: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        trim: true
     },
     address:{
-        type: String
+        type: String,
+        trim: true
     },
     birthday:{
         type: String
     },
     website:{
-        type: String
+        type: String,
+        trim: true
     },
     profileImage:{
         type: String

@@ -1,13 +1,11 @@
 const mongoose = require("mongoose");
-
 const BaseController = require("./baseController");
-
 const userModel = require("../models/userModel");
-
+const {createUserJoi, loginJoi} = require("../validator/joiValidation")
 const jwt = require('jsonwebtoken')
 
 class userController extends BaseController {
-    constructor() {
+    constructor() { 
         super(userModel);
     }
 
@@ -17,34 +15,18 @@ class userController extends BaseController {
 
         try {
             let data = req.body
-            let { firstName, lastName, email, password, mobile } = data
 
-            if (!firstName) {
-                return res.status(400).send({ status: false, message: "first name is required" })
-            }
+            let error
+            const validation = await createUserJoi.validateAsync(data).then(()=> true).catch((err)=>{error=err.message; return null})
+            if(!validation) return res.status(400).send({  status: false,message: error})
 
-            if (!lastName) {
-                return res.status(400).send({ status: false, message: "last name is required" })
-            }
-
-            if (!email) {
-                return res.status(400).send({ status: false, message: "email is required" })
-            }
-
-            let uniqueCheckEmail = await userModel.findOne({ email: email, isDeleted: false })
+            data.email = data.email.toLowerCase()
+            let uniqueCheckEmail = await userModel.findOne({ email: data.email, isDeleted: false })
             if (uniqueCheckEmail) {
                 return res.status(400).send({ status: false, message: "email is already exist" })
             }
 
-            if (!password) {
-                return res.status(400).send({ status: false, message: "password is required" })
-            }
-
-            if (!mobile) {
-                return res.status(400).send({ status: false, message: "mobile number is required" })
-            }
-
-            let uniqueCheckMobile = await userModel.findOne({ mobile: mobile, isDeleted: false })
+            let uniqueCheckMobile = await userModel.findOne({ mobile: data.mobile, isDeleted: false })
             if (uniqueCheckMobile) {
                 return res.status(400).send({ status: false, message: "Mobile number is already exist" })
             }
@@ -64,25 +46,22 @@ class userController extends BaseController {
 
         try {
             let data = req.body
-            let {email, password} = data
+            
+            let error
+            const validation = await loginJoi.validateAsync(data).then(()=> true).catch((err)=>{error=err.message; return null})
+            if(!validation) return res.status(400).send({  status: false,message: error})
     
-            if (!email) {
-                return res.status(400).send({ status: false, message: "email is required" })
-            }
-    
-            let checkEmail = await userModel.findOne({ email: email, isDeleted: false })
+            data.email = data.email.toLowerCase()
+            let checkEmail = await userModel.findOne({ email: data.email, isDeleted: false })
             if (!checkEmail) {
-                return res.status(400).send({ status: false, message: "email is not registered" })
+                return res.status(400).send({ status: false, message: "email is not registered, please register first" })
             }
     
-            if (!password) {
-                return res.status(400).send({ status: false, message: "password is required" })
+            if(checkEmail.password != data.password){
+                return res.status(400).send({status:false, message:"Please enter correct password"})
             }
-    
-            if(checkEmail.password == password){
-    
+            else{
                 let token = jwt.sign({userId: checkEmail._id}, "FSOC")
-                
                 res.status(200).send({status:true, message: token})
             }
         }

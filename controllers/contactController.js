@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
-
 const BaseController = require("./baseController");
-
 const contactModel = require("../models/contactModel");
-
+const { createContactJoi, editContactJoi } = require("../validator/joiValidation")
 const { AvatarGenerator } = require('random-avatar-generator')
 
 class contactController extends BaseController {
@@ -16,30 +14,24 @@ class contactController extends BaseController {
   async createContact(req, res) {
     try {
       let data = req.body
-      let { name, number ,email} = data
 
-      if (!name) {
-        return res.status(400).send({ status: false, message: "Name is required" })
-      }
-      data.name = name.toLowerCase()
+      let error
+      const validation = await createContactJoi.validateAsync(data).then(() => true).catch((err) => { error = err.message; return null })
+      if (!validation) return res.status(400).send({ status: false, message: error })
 
-      if (!number) {
-        return res.status(400).send({ status: false, message: "Number is required" })
-      }
+      data.userId = req.decode.userId
 
-      let uniqueCheck = await contactModel.findOne({ number: number, isDeleted: false })
+      let uniqueCheck = await contactModel.findOne({ number: data.number, userId: data.userId, isDeleted: false })
       if (uniqueCheck) {
         return res.status(400).send({ status: false, message: "Number is already exist" })
       }
 
-      if(email){
-        data.email = email.toLowerCase()
+      if (data.email) {
+        data.email = data.email.toLowerCase()
       }
 
       const generator = new AvatarGenerator()
       data.profileImage = generator.generateRandomAvatar()
-
-      data.userId = req.decode.userId
 
       let savedContact = await contactModel.create(data)
 
@@ -56,27 +48,35 @@ class contactController extends BaseController {
 
     try {
       let data = req.body
-      let { number, name, email} = data
       let contactId = req.params.contactId
 
-      let checkContactExist = await contactModel.findOne({_id: contactId, isDeleted:false})
-      if(!checkContactExist){
-        return res.status(404).send({status:false, message:"Contact is not exist"})
+      if (!mongoose.isValidObjectId(contactId)) {
+        return res.status(400).send({ status: false, message: "Please enter valid contactId in params" })
       }
 
-      if (number) {
-        let uniqueCheck = await contactModel.findOne({ number: number, isDeleted: false })
+      let error
+      const validation = await createContactJoi.validateAsync(data).then(() => true).catch((err) => { error = err.message; return null })
+      if (!validation) return res.status(400).send({ status: false, message: error })
+
+
+      let checkContactExist = await contactModel.findOne({ _id: contactId, userId: req.decode.userId, isDeleted: false })
+      if (!checkContactExist) {
+        return res.status(404).send({ status: false, message: "Contact is not exist" })
+      }
+
+      if (data.number) {
+        let uniqueCheck = await contactModel.findOne({ number: number, userId: req.decode.userId, isDeleted: false })
         if (uniqueCheck) {
           return res.status(400).send({ status: false, message: "Number is already exist" })
         }
       }
 
-      if(name){
-        data.name = name.toLowerCase()
-      }
+      // if(data.name){
+      //   data.name = name.toLowerCase()
+      // }
 
-      if(email){
-        data.email = email.toLowerCase()
+      if (data.email) {
+        data.email = data.email.toLowerCase()
       }
 
       let savedContact = await contactModel.findOneAndUpdate(
@@ -124,7 +124,7 @@ class contactController extends BaseController {
   async getContacts(req, res) {
 
     try {
-      let findContacts = await contactModel.find({userId: req.decode.userId}).sort({name: 1})
+      let findContacts = await contactModel.find({ userId: req.decode.userId, isDeleted: false }).sort({ name: 1 })
 
       res.status(200).send({ status: true, message: findContacts })
     }
@@ -140,9 +140,13 @@ class contactController extends BaseController {
     try {
       let contactId = req.params.contactId
 
-      let contactData = await contactModel.findOne({_id: contactId, isDeleted: false})
-      if(!contactData){
-        return res.status(404).send({status:false, message:"contact is not exist"})
+      if (!mongoose.isValidObjectId(contactId)) {
+        return res.status(400).send({ status: false, message: "Please enter valid contactId in params" })
+      }
+
+      let contactData = await contactModel.findOne({ _id: contactId, isDeleted: false })
+      if (!contactData) {
+        return res.status(404).send({ status: false, message: "contact is not exist" })
       }
 
       res.status(200).send({ status: true, message: contactData })
@@ -158,7 +162,11 @@ class contactController extends BaseController {
 
     try {
       let contactId = req.params.contactId
-      
+
+      if (!mongoose.isValidObjectId(contactId)) {
+        return res.status(400).send({ status: false, message: "Please enter valid contactId in params" })
+      }
+
       await contactModel.findOneAndUpdate(
         { _id: contactId, isDeleted: false },
         { isDeleted: true },
