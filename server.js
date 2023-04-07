@@ -16,10 +16,13 @@ connectDatabase();
 // Init Middleware
 app.use(express.json({ extended: false }));
 
+const cors = require('cors')
 app.use(cors())
 
-// Server Check
-app.get("/", (req, res) => res.send("API Running"));
+
+app.use("*", (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+});
 
 app.use("/api/contact", contactRoute);
 app.use("/api/user", userRoute)
