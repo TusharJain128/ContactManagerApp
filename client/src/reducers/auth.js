@@ -28,7 +28,7 @@ export default function auth(state = initialState, action) {
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
-      localStorage.setItem("token", payload.token);
+      localStorage.setItem("x-api-key", payload.token);
       return {
         ...state,
         ...payload,
@@ -39,7 +39,7 @@ export default function auth(state = initialState, action) {
     case AUTH_ERROR:
     case LOGIN_FAIL:
     case LOGOUT:
-      localStorage.removeItem("token");
+      localStorage.removeItem("x-api-key");
       return {
         ...state,
         token: null,

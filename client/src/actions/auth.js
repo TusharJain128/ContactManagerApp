@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 
 import {
   REGISTER_SUCCESS,
@@ -15,11 +16,11 @@ import setAuthToken from "../utils/setAuthToken";
 import { appConfig } from "./../config/config";
 
 export const loadUser = () => async (dispatch) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("x-api-key");
   if (token) setAuthToken(token);
 
   try {
-    const res = await axios.get(`${appConfig.API_URL}/api/auth`);
+    const res = await axios.get(`${appConfig.API_URL}/api/contact/getContacts`);
 
     dispatch({
       type: USER_LOADED,
@@ -43,7 +44,7 @@ export const register =
     const body = JSON.stringify({ firstName,lastName, email, password, mobile });
     try {
       const res = await axios.post(
-        `${appConfig.API_URL}/api/user/register`,
+        `${appConfig.API_URL}/api/user/createUser`,
         body,
         config
       );
@@ -51,7 +52,7 @@ export const register =
         type: REGISTER_SUCCESS,
         payload: res.data,
       });
-      dispatch(loadUser());
+       return <Redirect to="/login" />
     } catch (err) {
       const errors = err.response.data.errors;
       if (errors) {
