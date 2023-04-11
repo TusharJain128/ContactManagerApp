@@ -10,6 +10,7 @@ import { loadUser } from "./actions/auth";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Dashboard from "./components/layout/Dashboard";
+import CreateContact from "./components/layout/CreateContact"
 
 import PrivateRoute from "./components/routing/PrivateRoute";
 
@@ -27,9 +28,9 @@ function App() {
         <section>
           <Switch>
             <PrivateRoute exact path="/" component={Dashboard} />
-            <PrivateRoute exact path="/dashboard" component={Dashboard} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/CreateContact" component={CreateContact} />
           </Switch>
         </section>
       </Fragment>
