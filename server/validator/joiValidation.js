@@ -53,6 +53,8 @@ exports.editContactJoi = Joi.object({
     
     number:Joi.string().trim().optional(),
 
+    birthday: Joi.string().trim(),
+
     address: Joi.string().trim().optional().regex(/^[a-zA-Z ]+$/).message("please provide valid address"),
 
     website: Joi.string().trim().optional().regex(/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/).message("please enter valid website")

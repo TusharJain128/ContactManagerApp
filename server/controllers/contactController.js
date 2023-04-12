@@ -65,7 +65,7 @@ class contactController extends BaseController {
       }
 
       if (data.number) {
-        let uniqueCheck = await contactModel.findOne({ number: number, userId: req.decode.userId, isDeleted: false })
+        let uniqueCheck = await contactModel.findOne({ number: data.number, userId: req.decode.userId, isDeleted: false })
         if (uniqueCheck) {
           return res.status(400).send({ status: false, message: "Number is already exist" })
         }
