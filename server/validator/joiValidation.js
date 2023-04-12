@@ -31,7 +31,7 @@ exports.createContactJoi = Joi.object({
 
     name: Joi.string().trim().required().regex(/^[a-zA-Z ]+$/).message("please provide valid first name"),
 
-    email:Joi.string().trim().required().regex(/^[A-Za-z0-9._]{3,}@[A-Za-z]{3,}[.]{1,}[A-Za-z.]{2,8}$/).message("please enter valid email"),
+    email:Joi.string().trim().regex(/^[A-Za-z0-9._]{3,}@[A-Za-z]{3,}[.]{1,}[A-Za-z.]{2,8}$/).message("please enter valid email"),
     
     number:Joi.string().trim().required(),
 
