@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const userModel = require("../models/userModel");
 const {createUserJoi, loginJoi} = require("../validator/joiValidation")
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+const saltrounds = 10;
 
     //------------------------------------Register User--------------------------------->
 
@@ -25,6 +27,9 @@ const jwt = require('jsonwebtoken')
                 return res.status(400).send({ status: false, message: "Mobile number is already exist" })
             }
 
+            let encryptedPassword = await bcrypt.hash(data.password, saltrounds)
+            data.password = encryptedPassword
+            
             let createUser = await userModel.create(data)
 
             res.status(201).send({ status: true, message: createUser })
@@ -51,7 +56,8 @@ const jwt = require('jsonwebtoken')
                 return res.status(400).send({ status: false, message: "email is not registered, please register first" })
             }
     
-            if(checkEmail.password != data.password){
+            const decodedPassword = await bcrypt.compare(data.password, checkEmail.password)
+            if(!decodedPassword){
                 return res.status(400).send({status:false, message:"Please enter correct password"})
             }
             else{
