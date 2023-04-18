@@ -3,7 +3,7 @@ import axios from "axios"
 import { useNavigate, useParams } from "react-router-dom"
 import './getContact.css'
 import '../auth/login.css'
-import Navbar from "../navbar/Navbar"
+import Navbar from "../navbar/GetContactIdNavbar"
 import DeleteConfirmationPopup from "./DeleteConfirmationPopup"
 
 export default function GetContactById(){
@@ -14,6 +14,7 @@ export default function GetContactById(){
     const {contactId} = useParams()
     const token = localStorage.getItem('x-api-key')
 
+    useEffect(()=>{
     axios.get(`http://localhost:3001/api/contact/getContact/${contactId}`,
                             {headers:{'x-api-key': token}})
     .then((res)=>{
@@ -22,7 +23,7 @@ export default function GetContactById(){
     .catch((err)=>{
         alert(err.response.data.message + err.response.status + " Error");
     })
-
+  },[])
     const handleDeleteClick = (contactId) => {
         setDeleteContactId(contactId);
         setIsPopupOpen(true);

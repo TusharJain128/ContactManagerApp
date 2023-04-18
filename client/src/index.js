@@ -9,8 +9,8 @@ import GetContactById from './Components/scripts/GetContactById';
 import DeleteContact from './Components/scripts/DeleteContacts';
 import EditContact from './Components/scripts/EditContact';
 
-const rootElement = document.getElementById('root');
-const root = createRoot(rootElement);
+const rootElement = document.getElementById('root'); // get a reference to an element in the DOM with an id of root
+const root = createRoot(rootElement); //create a new root in the DOM for a React application.
 
 root.render(
     <BrowserRouter>

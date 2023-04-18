@@ -2,19 +2,20 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import "./contacts.css";
-import Navbar from "../navbar/Navbar";
+import Navbar from "../navbar/HomePageNavbar";
 import DeleteConfirmationPopup from "../scripts/DeleteConfirmationPopup";
 
 export default function GetContacts() {
   const [data, setData] = useState([]);
   const [deleteContactId, setDeleteContactId] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  let [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     let token = localStorage.getItem("x-api-key");
     axios
-      .get("http://localhost:3001/api/contact/getContacts", {
+      .get(`http://localhost:3001/api/contact/getContacts${searchTerm ? `?name=${searchTerm}` : ""}`, {
         headers: { "x-api-key": token },
       })
       .then((res) => {
@@ -24,7 +25,7 @@ export default function GetContacts() {
         alert(err.response.data.message + err.response.status + " Error");
         navigate("/login");
       });
-  }, []);
+  }, [searchTerm]);
 
   const handleDeleteClick = (contactId) => {
     setDeleteContactId(contactId);
@@ -41,12 +42,17 @@ export default function GetContacts() {
     setIsPopupOpen(false);
   };
 
+  let handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+
   return (
     <>
-      {Navbar()}
+      <Navbar handleSearch={handleSearch} searchTerm={searchTerm} />
       <div className="contacts">
         {data.map((contact) => (
-          <div key={contact._id} className="contact">
+          <div key={Math.random()} className="contact">
             <img
               src={contact.profileImage}
               alt={contact.name}
