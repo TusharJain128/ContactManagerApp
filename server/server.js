@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 const dotenv = require('dotenv')
 const contactRoute = require("./routes/api/contact");
 const userRoute = require("./routes/api/user")
+const cors = require('cors');
 
 const app = express();
 app.use(express.json())
-const cors = require('cors');
 app.use(cors())
 dotenv.config()
 

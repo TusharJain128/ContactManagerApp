@@ -3,7 +3,7 @@ const userModel = require("../models/userModel");
 const {createUserJoi, loginJoi} = require("../validator/joiValidation")
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const saltrounds = 10;
+const saltrounds = 10; // represents the number of rounds of hashing to apply to the password
 
     //------------------------------------Register User--------------------------------->
 
