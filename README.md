@@ -1,7 +1,7 @@
 # Contact Manager App
 
 
-Create an app where users can store and organize contact information for their personal or professional contacts. Users will be required to create an account or login to access app's feature. Users should be able to add, edit, and delete contacts, and view a list of all their contacts. Users can create new contacts by entering information such as name, email address, phone number, address, birthday, website.
+Create an app where users can store and organize contact information for their personal or professional contacts. Users will be required to create an account or login to access app's feature. Users should be able to add, edit, and delete contacts, and view a list of all their contacts. Users can create new contacts by entering information such as name, email address, phone number, address, birthday, website. User can search any contact by their name.
 
 ## Deployment Link
 https://tushar-fsocproject-contactapp.netlify.app
