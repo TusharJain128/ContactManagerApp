@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import "./contacts.css";
-import Navbar from "../navbar/HomePageNavbar";
+import Navbar from "../navbar/Nav";
 import DeleteConfirmationPopup from "../scripts/DeleteConfirmationPopup";
 
 export default function GetContacts() {
@@ -49,7 +49,7 @@ export default function GetContacts() {
 
   return (
     <>
-      <Navbar handleSearch={handleSearch} searchTerm={searchTerm} />
+      <Navbar handleSearch={handleSearch} searchTerm={searchTerm} searchBar={true} />
       <div className="contacts">
         {data.map((contact) => (
           <div key={Math.random()} className="contact">

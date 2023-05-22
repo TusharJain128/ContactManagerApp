@@ -3,7 +3,7 @@ import axios from "axios"
 import { useNavigate, useParams } from "react-router-dom"
 import './getContact.css'
 import '../auth/login.css'
-import Navbar from "../navbar/GetContactIdNavbar"
+import Navbar from "../navbar/Nav"
 import DeleteConfirmationPopup from "./DeleteConfirmationPopup"
 
 export default function GetContactById(){
@@ -41,7 +41,7 @@ export default function GetContactById(){
 
     return(
         <>
-        <>{Navbar()}</>
+        <Navbar searchBar={false}/>
         <div className="contact-card">
             <h2 align="center">Contact Details</h2>
             <p className="contact-field"><strong>Name:</strong> {data.name}</p>
