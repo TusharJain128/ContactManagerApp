@@ -58,9 +58,18 @@ const saltrounds = 10; // represents the number of rounds of hashing to apply to
     
             const decodedPassword = await bcrypt.compare(data.password, checkEmail.password)
             if(!decodedPassword){
+                // Implement rate limiting after 3 wrong attempts
+                const loginAttempts = req.session.loginAttempts || 0;
+                req.session.loginAttempts = loginAttempts + 1;
+
+                if (loginAttempts >= 3) {
+                    return res.status(429).send({ status: false, message: "Too many login attempts. Please try again later." });
+                }
                 return res.status(400).send({status:false, message:"Please enter correct password"})
             }
             else{
+                // Reset the login attempts on successful login
+                req.session.loginAttempts = 0;
                 let token = jwt.sign({userId: checkEmail._id}, "FSOC")
                 res.status(200).send({status:true, token: token})
             }
