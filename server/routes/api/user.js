@@ -1,6 +1,7 @@
 const express = require("express");
 
 const {registerUser,loginUser} = require("../../controllers/userController");
+const { RateLimiter } = require("../../middleware/middleware");
 
 const router = express.Router();
 
@@ -16,6 +17,6 @@ router.post("/createUser", registerUser);
  * @desc    Login user
  * @access  Public
  */
-router.post("/loginUser", loginUser);
+router.post("/loginUser", RateLimiter, loginUser);
 
 module.exports = router;

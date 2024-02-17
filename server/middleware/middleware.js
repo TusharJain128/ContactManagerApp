@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const contactModel = require('../models/contactModel')
 const userModel = require('../models/userModel')
 const mongoose = require('mongoose')
+const setRateLimit = require("express-rate-limit");
 
 exports.authentication = function(req,res,next){
 
@@ -46,3 +47,14 @@ exports.autherisation = async function(req,res,next){
         return res.status(500).send({status:false, error:error.message})
     }
 }
+
+
+exports.RateLimiter = setRateLimit({
+    windowMs: 60 * 1000,
+    max: 5,
+    message: {
+        status: false,
+        message: "You have exceeded your 5 requests per minute limit."
+    },
+    headers: true,
+})

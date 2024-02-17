@@ -1,6 +1,5 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const session = require("express-session");
 const dotenv = require('dotenv').config();
 const contactRoute = require("./routes/api/contact");
 const userRoute = require("./routes/api/user")
@@ -19,16 +18,6 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();
 });
-
-app.use(session({
-  secret: process.env.SessionSecretKey,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-      secure: false, // Set to true if you use HTTPS
-      maxAge: 1000 * 60 * 60 * 24, // Session expiration time (e.g., 24 hours)
-  }
-}))
 
 app.use("/api/contact", contactRoute);
 app.use("/api/user", userRoute);
